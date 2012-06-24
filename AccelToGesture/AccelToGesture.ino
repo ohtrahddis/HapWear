@@ -11,7 +11,7 @@ int yold = 0;
 int zold = 0;
 
 float pitch;
-float roll
+float roll;
 float yaw;
 
 int dx = 0.1; //these are lee-way callibrations to account for jitter
