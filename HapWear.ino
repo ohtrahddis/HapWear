@@ -1,15 +1,15 @@
 #include <string.h>
 
-int FRONT = 1;
-int MIDDLE = 2;
-int BACK = 3;
-int LEFT = 5;
-int RIGHT = 11;
-int FRONTLEFT = 4;
-int FRONTRIGHT = 10;
-int BACKLEFT = 6;
-int BACKRIGHT = 12;
-int OPPOSITE = 8;
+int FRONT = 2;
+int MIDDLE = 3;
+int BACK = 4;
+int LEFT = 6;
+int RIGHT = 12;
+int FRONTLEFT = 5;
+int FRONTRIGHT = 11;
+int BACKLEFT = 7;
+int BACKRIGHT = 13;
+int OPPOSITE = 9;
 
 char orientation[] = "right";
 int pitch = 0;
@@ -22,7 +22,7 @@ int vectorZ = 0;
 int delayTime = 500;
 
 void setup() {
-  for(int i = 0; i < 13; i++) {
+  for(int i = 0; i < 14; i++) {
     pinMode(i, OUTPUT);
   }   
 }
@@ -30,52 +30,52 @@ void setup() {
 void loop() {
   
   if(strncmp(orientation, "top", 7) == 0) {
-    FRONT = 1;
-    MIDDLE = 2;
-    BACK = 3;
-    LEFT = 5;
-    RIGHT = 11;
-    FRONTLEFT = 4;
-    FRONTRIGHT = 10;
-    BACKLEFT = 6;
-    BACKRIGHT = 12;
-    OPPOSITE = 8;
+    FRONT = 2;
+    MIDDLE = 3;
+    BACK = 4;
+    LEFT = 6;
+    RIGHT = 12;
+    FRONTLEFT = 5;
+    FRONTRIGHT = 11;
+    BACKLEFT = 7;
+    BACKRIGHT = 13;
+    OPPOSITE = 9;
   }
   else if(strncmp(orientation, "left", 7) == 0) {
-    FRONT = 4;
-    MIDDLE = 5;
-    BACK = 6;
-    LEFT = 8;
-    RIGHT = 2;
-    FRONTLEFT = 7;
-    FRONTRIGHT = 1;
-    BACKLEFT = 9;
-    BACKRIGHT = 3;
-    OPPOSITE = 11;
+    FRONT = 5;
+    MIDDLE = 6;
+    BACK = 7;
+    LEFT = 9;
+    RIGHT = 3;
+    FRONTLEFT = 8;
+    FRONTRIGHT = 2;
+    BACKLEFT = 10;
+    BACKRIGHT = 4;
+    OPPOSITE = 12;
   }
   else if(strncmp(orientation, "right", 7) == 0) {
-    FRONT = 10;
-    MIDDLE = 11;
-    BACK = 12;
-    LEFT = 2;
-    RIGHT = 8;
-    FRONTLEFT = 1;
-    FRONTRIGHT = 7;
-    BACKLEFT = 3;
-    BACKRIGHT = 9;
-    OPPOSITE = 5;
+    FRONT = 11;
+    MIDDLE = 12;
+    BACK = 13;
+    LEFT = 3;
+    RIGHT = 9;
+    FRONTLEFT = 2;
+    FRONTRIGHT = 8;
+    BACKLEFT = 4;
+    BACKRIGHT = 10;
+    OPPOSITE = 6;
   }
   else if(strncmp(orientation, "bottom", 7) == 0) {
-    FRONT = 7;
-    MIDDLE = 8;
-    BACK = 9;
-    LEFT = 11;
-    RIGHT = 5;
-    FRONTLEFT = 10;
-    FRONTRIGHT = 4;
-    BACKLEFT = 12;
-    BACKRIGHT = 6;
-    OPPOSITE = 2;
+    FRONT = 8;
+    MIDDLE = 9;
+    BACK = 10;
+    LEFT = 12;
+    RIGHT = 6;
+    FRONTLEFT = 11;
+    FRONTRIGHT = 5;
+    BACKLEFT = 13;
+    BACKRIGHT = 7;
+    OPPOSITE = 3;
   }
   
   if(vectorZ >= 0 && abs(vectorZ) >= abs(vectorX) && abs(vectorZ) >= abs(vectorY)) {
@@ -129,14 +129,13 @@ void loop() {
     }
   }
   
-  /*
-  for(int i = 1; i < 13; i++) {
+  
+  for(int i = 1; i < 14; i++) {
     digitalWrite(i, HIGH);
     delay(delayTime);
     digitalWrite(i, LOW);
     delay(delayTime);
   }
-  */
 }
 
 void left() {
