@@ -14,7 +14,8 @@
 	#header, #footer {
 		width:100%;
 		text-align:center;
-		background:#000000;
+		background:#1a1a1a;
+		background-image:url("images/noise1.png");
 		color:#fff;
 		font-family:sans-serif;
 	}
@@ -41,22 +42,16 @@
 	#content {
 		display:block;
 		position:absolute;
-		top:6%;
-		height:85%;
+		top:5%;
+		padding-top:2%;
+		height:84%;
 		width:100%;
+		background:#ccc;
 		overflow:auto;
-	}
-
-	#map_canvas {
-		height:68%;
-		width:94%;
-		box-shadow:0px 0px 3px 3px #000;
-		margin: 0 auto;
 	}
 
 	#destinationSpan {
 		position:relative;
-		margin-bottom:2%;
 		text-align:center;
 		left:3%;
 		width:94%;
@@ -67,12 +62,28 @@
 		display:block;
 		width:94%;
 		margin:0 auto;
+		margin-bottom:2%;
+		height:40%;
+		text-align:center;
+		background:#fff;
+		box-shadow:0px 0px 2px 2px #aaa;
+		outline:none;
+		border:none;
+	}
+
+	#map_canvas {
+		height:68%;
+		width:94%;
+		margin: 5% auto 0 auto;
+		border-radius:5px;
+		box-shadow:0px 0px 2px 2px #555;
 	}
 
 	a.button {
 		text-decoration:none;
-		background-color:#aaa;
-		padding:2px 5px;
+		background-color:#ccc;
+		box-shadow:inset 0px 0px 2px 2px #555;
+		padding:3px 6px;
 		color:#000;
 		font-size:.8em;
 	}
@@ -88,7 +99,7 @@
 <div id="containerPage1">
 	<div id="header">
 		<div>
-			Hapwear
+			HAPWEAR
 		</div>
 	</div>
 	<div id="content">
@@ -158,3 +169,4 @@
 	});
 </script>
 </html>
+
