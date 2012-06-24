@@ -19,7 +19,7 @@ int vectorX = 0;
 int vectorY = 0;
 int vectorZ = 0;
 
-int delayTime = 500;
+int delayTime = 250;
 
 void setup() {
   for(int i = 0; i < 14; i++) {
