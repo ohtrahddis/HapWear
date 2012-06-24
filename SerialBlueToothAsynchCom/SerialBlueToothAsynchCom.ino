@@ -8,7 +8,12 @@
 */
 byte rx = 6;
 byte tx = 7;
-byte SWval;
+
+double xvect;
+double yvect;
+
+double lat;
+double longt;
 
 char sbuff[32];
 const char* sendbuff = "hello hai";
@@ -21,27 +26,33 @@ void setup(){
 }
 
 void loop(){
-  int sbuffpos = 0;
+  /* Check number of available bytes. */
   int numchars = Serial.available();
-  if(numchars > 31){
-    numchars = 0;
+  //Serial.print("numchars = ");
+  //Serial.println(numchars);
+    
+  /* Check the header: if a byte is incorrect, try again soon. */
+  if(numchars < 20){
+    delay(500);
+    return;
   }
-  /*for(sbuffpos = 0; sbuffpos<numchars; sbuffpos++){
-    sbuff[sbuffpos] = (char)mySerial.read();
-  }
-  sbuff[sbuffpos] = 0;
-  for(int x = 0; x<numchars; x++)
-  {
-    //blah = mySerial.read();
-    if(sbuff[x] != 0){
-      Serial.write(sbuff[x]);
+
+  /* We require a 4 byte header (0x01020304), then 2 doubles. */
+  /*char headerBuf;
+  for (int i=0; i < 4; ++i) {
+    Serial.readBytes(&headerBuf, 1);
+    if (headerBuf != (i + 1)) {
+      Serial.println("Invalid header.");
+      return;
     }
-    //if(mySerial.read() == compare.toCharArray())
-    //{
-    //  Serial.write("got hello");
-    //}
   }*/
-  //mySerial.write("hi\0");
-  Serial.readBytes(sbuff, 8);
-  delay(1000);
+  
+  /* Grab the data. */
+  Serial.readBytes(sbuff, 16);    
+  xvect = *((double*)sbuff);
+  yvect = *((double*)(sbuff+8));
+  
+  Serial.println(xvect, 32);
+  Serial.println(yvect, 32);
+  delay(100);
 }
