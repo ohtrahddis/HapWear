@@ -12,8 +12,8 @@ byte tx = 7;
 double xvect;
 double yvect;
 
-double lat;
-double longt;
+double lat = 37.42538273333336;
+double longt = -122.1395335555;
 
 char sbuff[32];
 const char* sendbuff = "hello hai";

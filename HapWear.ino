@@ -1,4 +1,7 @@
 #include <string.h>
+#include <math.h>
+
+#define PI 3.14159265
 
 int FRONT = 2;
 int MIDDLE = 3;
@@ -13,9 +16,9 @@ int OPPOSITE = 9;
 
 char orientation[] = "right";
 
-int vectorX = 0;
-int vectorY = 0;
-int vectorZ = 0;
+float vectorX = 0;
+float vectorY = 0;
+float vectorZ = 0;
 
 const float g = -9.8;
 
@@ -27,9 +30,9 @@ int xold = 0;
 int yold = 0;
 int zold = 0;
 
-float pitch;
-float roll;
-float yaw;
+float pitch = 0;
+float roll = 0;
+float yaw = 0;
 
 int dx = 0.1; //these are lee-way callibrations to account for jitter
 int dy = 0.2;
@@ -44,7 +47,11 @@ int xEff;
 int yEff;
 int zEff;
 
-int delayTime = 250;
+boolean increasing = false;
+boolean decreasing = false;
+float prevPitch = 0;
+
+int delayTime = 100;
 
 void setup() {
   for(int i = 0; i < 14; i++) {
@@ -230,7 +237,7 @@ void updateData(){
 
 boolean checkStillHand(){
   if(xDif != NULL && yDif != NULL && zDif != NULL){
-    if(abs(xDif) < dx && abs(yDif) < dy && abs(zDif) < dz ){
+    if(fabs(xDif) < dx && fabs(yDif) < dy && fabs(zDif) < dz ){
       return true;
     }
     else{
@@ -243,19 +250,19 @@ boolean checkStillHand(){
 }
 
 void checkDiff(){
-  if(abs(xDif) < dx){
+  if(fabs(xDif) < dx){
     xEff = xold;
   }else{
     xEff = x;
   }
   
-  if(abs(yDif) < dy){
+  if(fabs(yDif) < dy){
     yEff = yold;
   }else{
     yEff = y;
   }
   
-  if(abs(zDif) < dz){
+  if(fabs(zDif) < dz){
     zEff = zold;
   }else{
     zEff = z;
@@ -263,10 +270,94 @@ void checkDiff(){
 }
 
 boolean checkUpright(){
-  
+  int pitchleeway = 10;
+  if(fabs(pitch-90) < pitchleeway){
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
+boolean checkWave(){
+  float leeway = 5;
+  boolean prevIncreasing = increasing;
+  boolean prevDecreasing = decreasing;
+  if(checkUpright()) {
+    if(prevPitch == 0) {
+      prevPitch = pitch;
+    }
+    else if(pitch > prevPitch + leeway) { //now increasing
+      increasing = true;
+      decreasing = false;
+      if(!prevIncreasing && prevDecreasing) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    else if(pitch < prevPitch - leeway) { //now decreasing
+      decreasing = true;
+      increasing = false;
+      if(prevIncreasing && !prevDecreasing) {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+    else { //not moving
+      increasing = false;
+      decreasing = false;
+      return false;
+    }
+  }
+}
+
+//#include <ctype.h>
+#include <SoftwareSerial.h>
+/*
+#define bit9600Delay 84  
+#define halfBit9600Delay 42
+#define bit4800Delay 188 
+#define halfBit4800Delay 94 
+*/
+byte rx = 6;
+byte tx = 7;
+
+double xvect;
+double yvect;
+
+double lat;
+double longt;
+
+char sbuff[32];
+const char* sendbuff = "hello hai";
+
 void loop() {
+  /*
+  int numchars = Serial.available();
+  if(numchars < 20){
+    delay(500);
+    return;
+  }
+  Serial.readBytes(sbuff, 16);    
+  xvect = *((double*)sbuff);
+  yvect = *((double*)(sbuff+8));
+  
+  Serial.println(xvect, 32);
+  Serial.println(yvect, 32);
+  delay(100);
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   updateData();
   checkDiff();
@@ -274,6 +365,10 @@ void loop() {
   if(IsHandStill){
     Serial.write("Hand is Still");
   }
+  
+  vectorX = sin(pitch*PI/180);
+  vectorY = sin(yaw*PI/180) * cos(pitch*PI/180);
+  vectorZ = cos(yaw*PI/180) * cos(pitch*PI/180);
   
   if(strncmp(orientation, "top", 7) == 0) {
     FRONT = 2;
@@ -324,50 +419,50 @@ void loop() {
     OPPOSITE = 3;
   }
   
-  if(vectorZ >= 0 && abs(vectorZ) >= abs(vectorX) && abs(vectorZ) >= abs(vectorY)) {
+  if(vectorZ >= 0 && fabs(vectorZ) >= fabs(vectorX) && fabs(vectorZ) >= fabs(vectorY)) {
     up();
   }
-  else if(vectorZ < 0 && abs(vectorZ) >= abs(vectorX) && abs(vectorZ) >= abs(vectorY)) {
+  else if(vectorZ < 0 && fabs(vectorZ) >= fabs(vectorX) && fabs(vectorZ) >= fabs(vectorY)) {
     down();
   }
-  else if(vectorX <= 0 && abs(vectorX) >= abs(vectorY) && abs(vectorX) >= abs(vectorZ)) {
-    if(vectorY >= 0 && abs(vectorY) >= 0.5 * (float)abs(vectorX)) {
+  else if(vectorX <= 0 && fabs(vectorX) >= fabs(vectorY) && fabs(vectorX) >= fabs(vectorZ)) {
+    if(vectorY >= 0 && fabs(vectorY) >= 0.5 * (float)fabs(vectorX)) {
       frontLeft();
     }
-    else if(vectorY < 0 && abs(vectorY) >= 0.5 * (float)abs(vectorX)) {
+    else if(vectorY < 0 && fabs(vectorY) >= 0.5 * (float)fabs(vectorX)) {
       backLeft();
     }
     else{
       left();
     }
   }
-  else if(vectorX > 0 && abs(vectorX) >= abs(vectorY) && abs(vectorX) >= abs(vectorZ)) {
-    if(vectorY >= 0 && abs(vectorY) >= 0.5 * (float)abs(vectorX)) {
+  else if(vectorX > 0 && fabs(vectorX) >= fabs(vectorY) && fabs(vectorX) >= fabs(vectorZ)) {
+    if(vectorY >= 0 && fabs(vectorY) >= 0.5 * (float)fabs(vectorX)) {
       frontRight();
     }
-    else if(vectorY < 0 && abs(vectorY) >= 0.5 * (float)abs(vectorX)) {
+    else if(vectorY < 0 && fabs(vectorY) >= 0.5 * (float)fabs(vectorX)) {
       backRight();
     }
     else{
       right();
     }
   }
-  else if(vectorY >= 0 && abs(vectorY) >= abs(vectorX) && abs(vectorY) >= abs(vectorZ)) {
-    if(vectorX >= 0 && abs(vectorX) >= 0.5 * (float)abs(vectorY)) {
+  else if(vectorY >= 0 && fabs(vectorY) >= fabs(vectorX) && fabs(vectorY) >= fabs(vectorZ)) {
+    if(vectorX >= 0 && fabs(vectorX) >= 0.5 * (float)fabs(vectorY)) {
       frontRight();
     }
-    else if(vectorX < 0 && abs(vectorX) >= 0.5 * (float)abs(vectorY)) {
+    else if(vectorX < 0 && fabs(vectorX) >= 0.5 * (float)fabs(vectorY)) {
       frontLeft();
     }
     else{
       front();
     }
   }
-  else if(vectorY < 0 && abs(vectorY) >= abs(vectorX) && abs(vectorY) >= abs(vectorZ)) {
-    if(vectorX >= 0 && abs(vectorX) >= 0.5 * (float)abs(vectorY)) {
+  else if(vectorY < 0 && fabs(vectorY) >= fabs(vectorX) && fabs(vectorY) >= fabs(vectorZ)) {
+    if(vectorX >= 0 && fabs(vectorX) >= 0.5 * (float)fabs(vectorY)) {
       backRight();
     }
-    else if(vectorX < 0 && abs(vectorX) >= 0.5 * (float)abs(vectorY)) {
+    else if(vectorX < 0 && fabs(vectorX) >= 0.5 * (float)fabs(vectorY)) {
       backLeft();
     }
     else{
@@ -384,6 +479,9 @@ void loop() {
     digitalWrite(i, LOW);
     delay(delayTime);
   }
+  */
+  
+  frontRight();
 }
 
 
