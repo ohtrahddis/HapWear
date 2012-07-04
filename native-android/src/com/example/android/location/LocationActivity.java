@@ -16,6 +16,10 @@
 
 package com.example.android.location;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -39,10 +43,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class LocationActivity extends FragmentActivity {
     private TextView mLatLng;
@@ -87,8 +87,10 @@ public class LocationActivity extends FragmentActivity {
         }
         mLatLng = (TextView) findViewById(R.id.latlng);
         mAddress = (TextView) findViewById(R.id.address);
+        
         // Receive location updates from the fine location provider (gps) only.
         mFineProviderButton = (Button) findViewById(R.id.provider_fine);
+        
         // Receive location updates from both the fine (gps) and coarse (network) location
         // providers.
         mBothProviderButton = (Button) findViewById(R.id.provider_both);
