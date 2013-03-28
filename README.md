@@ -13,3 +13,6 @@ Possible uses include:
   * Navigation for blind users 
   * Turn by turn instructions for bike riders
   * Directions while running, jogging, driving, and much more
+
+## Videos and Examples
+[Video of the Bracelet](http://www.youtube.com/watch?v=iyeixaQ4Ejs)
