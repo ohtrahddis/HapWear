@@ -1,7 +1,7 @@
 HapWear
 =======
 ![HapWear](http://i.imgur.com/NIsGjzs.jpg?1?7914)
-![Our bluetooth framework](https://github.com/thanhhaimai/IcyRain)
+[Our bluetooth framework](https://github.com/thanhhaimai/IcyRain)
 ## About
 ### HapWear is a haptic feedback bracelet that communicates with a smartphone to provide hands-free navigation without looking at a map or the phone.
 The bracelet contains an LED matrix as well as a number of vibrational motors to create haptic patterns across the wearer's wrist. This creates a hands-free environment where the bracelet seamlessly guides you in the correct direction.
